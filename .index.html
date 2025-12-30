@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamada Taro | Web Designer Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            /* Light Mode (Default) */
+            --primary: #2C3E50;       /* Dark Blue */
+            --accent: #E74C3C;        /* Red */
+            --bg-body: #ECF0F1;       /* Light Gray */
+            --bg-card: #FFFFFF;
+            --text-main: #2C3E50;
+            --text-sub: #7F8C8D;
+            --text-light: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode */
+            --primary: #34495E;       /* Slightly lighter blue for dark bg */
+            --accent: #E74C3C;        /* Keep Red */
+            --bg-body: #1a252f;       /* Darker than primary */
+            --bg-card: #2C3E50;
+            --text-main: #ECF0F1;
+            --text-sub: #BDC3C7;
+            --text-light: #ECF0F1;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .en-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* --- Components --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            color: var(--text-main);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 10px auto 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--text-light);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--text-light); /* Assuming dark background in hero */
+            color: var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-light);
+            color: var(--primary);
+        }
+
+        /* --- Animations --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] header {
+            background-color: rgba(26, 37, 47, 0.95);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] .logo {
+            color: var(--text-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-left: 20px;
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 120px 20px 0; /* 上部の余白を増やしてヘッダー被りを回避 */
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: #ecf0f1;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* --- About Section --- */
+        #about {
+            padding: 100px 0;
+        }
+
+        .about-grid {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-img {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-img img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            border: 5px solid var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        .about-text {
+            flex: 1.5;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--text-sub);
+        }
+
+        .strong-point {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* --- Skills Section --- */
+        #skills {
+            padding: 100px 0;
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        [data-theme="dark"] #skills {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .skill-category {
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .skill-category h3 {
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] .skill-category h3 {
+            color: var(--text-light);
+        }
+
+        .skill-list {
+            text-align: left;
+        }
+
+        .skill-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-item i {
+            color: var(--accent);
+            width: 30px;
+            margin-right: 10px;
+        }
+
+        /* --- Works Section --- */
+        #works {
+            padding: 100px 0;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .work-card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .work-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .work-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .work-info {
+            padding: 25px;
+        }
+
+        .work-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] .work-info h3 {
+            color: var(--text-light);
+        }
+
+        .work-info p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-bottom: 15px;
+        }
+
+        .tags span {
+            display: inline-block;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+        }
+
+        /* Work Images (CSS Gradients as placeholders) */
+        .w-img-1 { background: linear-gradient(135deg, #2c3e50, #3498db); }
+        .w-img-2 { background: linear-gradient(135deg, #f39c12, #e74c3c); }
+        .w-img-3 { background: linear-gradient(135deg, #27ae60, #f1c40f); }
+
+        /* --- Contact Section --- */
+        #contact {
+            padding: 100px 0;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        #contact .section-title {
+            color: white;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto 50px;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            font-family: inherit;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            height: 150px;
+        }
+
+        .sns-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .sns-links a {
+            font-size: 2rem;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .sns-links a:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #1a252f;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.8rem;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: var(--bg-card);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: var(--transition);
+                box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hamburger {
+                display: block;
+                color: var(--primary);
+            }
+            
+            [data-theme="dark"] .hamburger {
+                color: var(--text-light);
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .about-grid {
+                flex-direction: column;
+            }
+
+            .about-img img {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">YAMADA.DESIGN</div>
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#about" onclick="toggleMenu()">About</a></li>
+                    <li><a href="#skills" onclick="toggleMenu()">Skills</a></li>
+                    <li><a href="#works" onclick="toggleMenu()">Works</a></li>
+                    <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; align-items: center;">
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="hamburger" onclick="toggleMenu()" style="margin-left: 20px;">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content fade-in">
+            <h1>Colors Logic,<br>Designs Magic.</h1>
+            <p>色彩検定1級の知識と確かなコーディング技術で、企業の想いを「伝わる」形に。<br>CVR向上に貢献するWebデザインを提供します。</p>
+            <div class="hero-buttons">
+                <a href="#works" class="btn btn-primary">実績を見る</a>
+                <a href="#contact" class="btn btn-secondary">お問い合わせ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title fade-in">Who I Am</div>
+            <div class="about-grid">
+                <div class="about-img fade-in">
+                    <!-- Placeholder for profile image -->
+                    <img src="https://ui-avatars.com/api/?name=Yamada+Taro&background=2C3E50&color=fff&size=300" alt="プロフィール画像">
+                </div>
+                <div class="about-text fade-in">
+                    <h3>Web Designer / Yamada Taro</h3>
+                    <p>はじめまして、Webデザイナーの山田太郎です。<br>
+                    都内の制作会社で3年間、企業のコーポレートサイトや商品LPの制作に従事し、現在はフリーランスとして活動しています。</p>
+                    
+                    <div class="strong-point">
+                        <strong><i class="fas fa-lightbulb"></i> 強み：色彩心理学に基づいたデザイン</strong>
+                        <p style="margin-top: 10px; font-size: 0.95rem;">
+                            ただ綺麗なだけでなく、「信頼感を与える青」「購買意欲をそそる赤」など、目的に合わせた色使いでビジネスの課題解決をサポートします。
+                        </p>
+                    </div>
+                    
+                    <p style="margin-top: 20px; font-size: 0.9rem;">
+                        <i class="fas fa-heart" style="color: var(--accent);"></i> 趣味: 街中の看板の配色分析、カフェ巡り。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-title fade-in">My Skills</div>
+            <div class="skills-container">
+                <!-- Design Skills -->
+                <div class="skill-category fade-in">
+                    <h3><i class="fas fa-pencil-ruler"></i> Design</h3>
+                    <div class="skill-list">
+                        <div class="skill-item"><i class="fab fa-figma"></i> Figma / Adobe XD</div>
+                        <div class="skill-item"><i class="fas fa-image"></i> Photoshop</div>
+                        <div class="skill-item"><i class="fas fa-vector-square"></i> Illustrator</div>
+                        <div class="skill-item"><i class="fas fa-palette"></i> 色彩検定1級 (AFT認定)</div>
+                    </div>
+                </div>
+                
+                <!-- Development Skills -->
+                <div class="skill-category fade-in">
+                    <h3><i class="fas fa-code"></i> Development</h3>
+                    <div class="skill-list">
+                        <div class="skill-item"><i class="fab fa-html5"></i> HTML5 (Semantic)</div>
+                        <div class="skill-item"><i class="fab fa-css3-alt"></i> CSS3 / SCSS (BEM)</div>
+                        <div class="skill-item"><i class="fab fa-js"></i> JavaScript (Vanilla JS)</div>
+                        <div class="skill-item"><i class="fab fa-wordpress"></i> WordPress</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Works Section -->
+    <section id="works">
+        <div class="container">
+            <div class="section-title fade-in">Selected Works</div>
+            <div class="works-grid">
+                
+                <!-- Case 1 -->
+                <div class="work-card fade-in">
+                    <div class="work-img w-img-1"></div>
+                    <div class="work-info">
+                        <h3>株式会社テックスタイル</h3>
+                        <p>コーポレートサイト</p>
+                        <p style="font-size: 0.85rem; color: var(--text-main);">信頼感を重視したネイビー基調のデザイン。レスポンシブ対応によりスマホからの問い合わせが120%増加。</p>
+                        <div class="tags">
+                            <span>Web Design</span>
+                            <span>Coding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="work-card fade-in">
+                    <div class="work-img w-img-2"></div>
+                    <div class="work-info">
+                        <h3>美容液「Lumiere」</h3>
+                        <p>ランディングページ</p>
+                        <p style="font-size: 0.85rem; color: var(--text-main);">ターゲット層に響くゴールドとピンクの配色。FVの離脱率改善に貢献。</p>
+                        <div class="tags">
+                            <span>LP Design</span>
+                            <span>Photoshop</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="work-card fade-in">
+                    <div class="work-img w-img-3"></div>
+                    <div class="work-info">
+                        <h3>カフェ「Sun & Beans」</h3>
+                        <p>店舗サイト</p>
+                        <p style="font-size: 0.85rem; color: var(--text-main);">暖色系で居心地の良さを表現。メニューのシズル感を引き立てるレイアウト。</p>
+                        <div class="tags">
+                            <span>Web Design</span>
+                            <span>WordPress</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container fade-in">
+            <div class="section-title">Get In Touch</div>
+            <p style="margin-bottom: 40px;">制作のご依頼、お見積もり、その他ご相談はお気軽にどうぞ。<br>2営業日以内に返信いたします。</p>
+            
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('お問い合わせありがとうございます。送信内容を受け付けました。');">
+                <div class="form-group">
+                    <label for="name">お名前</label>
+                    <input type="text" id="name" class="form-control" placeholder="山田 太郎" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">メールアドレス</label>
+                    <input type="email" id="email" class="form-control" placeholder="example@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">お問い合わせ内容</label>
+                    <textarea id="message" class="form-control" placeholder="ご用件を入力してください" required></textarea>
+                </div>
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-primary" style="border: 2px solid white; background-color: white; color: var(--accent);">送信する</button>
+                </div>
+            </form>
+
+            <div class="sns-links">
+                <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Yamada Taro Portfolio. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme');
+
+        // Initial Theme Load
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Icon Toggle
+            if (newTheme === 'dark') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            if (window.innerWidth <= 768) {
+                navLinks.classList.toggle('active');
+            }
+        }
+
+        // Scroll Animation (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Play animation only once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
